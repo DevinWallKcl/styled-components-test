@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { mapProp, ifProp } from '../../../lib/styledUtilities'
+import { mapProp, ifProp, themeColor, prop } from '../../../lib/styledUtilities'
 
 type Values<T> = T[keyof T]
 
@@ -11,8 +11,8 @@ type ButtonProps = {
 
 export const StyleVariants = {
   Primary: 'primary',
-  secondary: 'secondary',
-  tertiary: 'tertiary',
+  Secondary: 'secondary',
+  Tertiary: 'tertiary',
 } as const
 
 export const SizeVariants = {
@@ -31,61 +31,62 @@ const Button = styled.button<ButtonProps>`
   color: ${ifProp(
     ({ variant }) => variant != StyleVariants.Primary,
     mapProp('variant', ({ theme }) => ({
-      [StyleVariants.secondary]: 'white',
+      [StyleVariants.Secondary]: 'white',
       default: theme.colors.secondary,
     }))
   )};
 
-  border: 1px solid ${mapProp('variant', ({ theme }) => ({
-    [StyleVariants.Primary]: theme.colors.primary,
-    default: theme.colors.secondary,
-  }))};
+  border: 1px solid ${mapProp('variant', {
+    [StyleVariants.Primary]: themeColor('primary'),
+    default: themeColor('secondary'),
+  })};
 
-  background: ${mapProp('variant', ({ theme }) => ({
-    [StyleVariants.secondary]: theme.colors.secondary,
-    [StyleVariants.tertiary]: 'inherit',
-    default: theme.colors.primary,
-  }))};
+  background: ${mapProp('variant', {
+    [StyleVariants.Secondary]: themeColor('secondary'),
+    [StyleVariants.Tertiary]: 'inherit',
+    default: themeColor('primary'),
+  })};
 
   &:hover {
-    background: ${mapProp('variant', ({ theme }) => ({
-      [StyleVariants.secondary]: theme.colors.secondaryDark,
-      [StyleVariants.tertiary]: 'inherit',
-      default: theme.colors.primaryDark,
-    }))};
+    background: ${mapProp('variant', {
+      [StyleVariants.Secondary]: themeColor('secondaryDark'),
+      [StyleVariants.Tertiary]: themeColor('grayLight'),
+      default: themeColor('primaryDark'),
+    })};
   }
 
   &:disabled {
-    background: ${mapProp('variant', ({ theme }) => ({
-      [StyleVariants.secondary]: theme.colors.secondaryPale,
-      [StyleVariants.tertiary]: 'inherit',
-      default: theme.colors.primaryPale,
-    }))};
+    background: ${mapProp('variant', {
+      [StyleVariants.Secondary]: themeColor('secondaryPale'),
+      [StyleVariants.Tertiary]: 'inherit',
+      default: themeColor('primaryPale'),
+    })};
 
     border: 1px solid
-      ${mapProp('variant', ({ theme }) => ({
-        [StyleVariants.Primary]: theme.colors.primaryPale,
-        default: theme.colors.secondaryPale,
-      }))};
+      ${mapProp('variant', {
+        [StyleVariants.Primary]: themeColor('primaryPale'),
+        [StyleVariants.Tertiary]: themeColor('charcoalPale'),
+        default: themeColor('secondaryPale'),
+      })};
   }
 
   line-height: 16px;
 
   font-size: ${mapProp('size', {
     [SizeVariants.Medium]: '16px',
-    [StyleVariants.tertiary]: '14px',
+    [StyleVariants.Tertiary]: '14px',
     default: '20px',
   })};
 
   height: ${mapProp('size', {
     [SizeVariants.Medium]: '40px',
-    [StyleVariants.tertiary]: '26px',
+    [StyleVariants.Tertiary]: '26px',
     default: '48px',
   })};
 
   padding ${mapProp('size', {
     [SizeVariants.Medium]: '12px 24px',
-    [StyleVariants.tertiary]: '5px 16px',
+    [StyleVariants.Tertiary]: '5px 16px',
     default: '16px 24px',
   })};
 `

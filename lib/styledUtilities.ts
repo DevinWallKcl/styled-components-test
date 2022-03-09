@@ -1,41 +1,14 @@
-import { DefaultTheme } from 'styled-components'
-
-type MapObject = {
-  [value: string | number]: any
-  default: any
-}
-
-export const mapValue = (selector: any, valueMap: MapObject) => {
-  let value = valueMap[selector]
-
-  if (!value) {
-    value = valueMap.default
-  }
-
-  return value
-}
+import { getPathValue, mapValue, MapObject } from './objectUtilities'
 
 export const prop = (key: string, defaultValue?: any) => (props: any) => {
-  if (props[key] != undefined) {
-    return props[key] ?? defaultValue
-  }
+  let value = props?.[key]
 
   // Key is a path lets walk it.
   if (key.includes('.')) {
-    const properties = key.split('.')
-    let currentIndex = 0
-    let currentProperty = props[properties[currentIndex]]
-
-    while (
-      currentProperty != null &&
-      currentProperty != undefined &&
-      ++currentIndex < properties.length
-    ) {
-      currentProperty = currentProperty[properties[currentIndex]]
-    }
-
-    return currentProperty ?? defaultValue
+    value = getPathValue(key, props)
   }
+
+  return value ?? defaultValue
 }
 
 type PropsCallback = (props: any) => MapObject
@@ -62,3 +35,8 @@ export const ifProp =
 
     return typeof resultToUse == 'function' ? resultToUse(props) : resultToUse
   }
+
+export const themeColor =
+  (key: string) =>
+  ({ theme }: any) =>
+    getPathValue(key, theme.colors)
